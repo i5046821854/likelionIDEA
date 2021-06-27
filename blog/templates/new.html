@@ -1,0 +1,13 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<h1>장소 추가하기</h1>
+<form action="{%url 'create' %}" method = "post" enctype="multipart/form-data">
+    {%csrf_token%}
+    location:
+    <input type = "text" name = "lat" value = "{{lat}}" >
+    <input type = "text" name = "lng" value = {{lng}}>
+    {{form.as_p}} <!--p태그로 감싸기-->
+    <button type = "submit">submit</button>
+</form>
+{% endblock %}
