@@ -60,7 +60,7 @@ def test(request):
 
 def edit_profile(request):
     if request.method == "POST":
-        form = editProfileForm(request.POST, instance = request.user)
+        form = editProfileForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect("home")

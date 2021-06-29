@@ -6,6 +6,7 @@ class blog(models.Model): #id에 대한 column 안써도됨
     lng = models.FloatField(max_length=50, default='0')
     title = models.CharField(max_length = 200)
     writer = models.CharField(max_length = 100)
+    category = models.CharField(max_length = 100, default = "none")
     pub_date = models.DateTimeField()
     body = models.TextField()
    # image = models.ImageField(upload_to = "blog/", blank = True, null = True)
@@ -16,3 +17,10 @@ class blog(models.Model): #id에 대한 column 안써도됨
 
     def summary(self): #본문 간단히 나타내기
         return self.body[:100]
+
+'''class list(models.Model):
+    name = models.CharField(max_length = 200, default="")
+    share = models.BooleanField(default='true')  
+    icon = models.ImageField(upload_to = "blog/", blank = True, null = True)
+    author = models.CharField(max_length = 200, default="")
+ '''

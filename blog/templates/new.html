@@ -5,8 +5,10 @@
 <form action="{%url 'create' %}" method = "post" enctype="multipart/form-data">
     {%csrf_token%}
     location:
-    <input type = "text" name = "lat" value = "{{lat}}" >
+    <input type = "text" name = "lat" value = {{lat}}>
     <input type = "text" name = "lng" value = {{lng}}>
+    category:
+    <input type = "text" name = "category" value = {{category}}>
     {{form.as_p}} <!--p태그로 감싸기-->
     <button type = "submit">submit</button>
 </form>

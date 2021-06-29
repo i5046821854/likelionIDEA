@@ -2,17 +2,49 @@
 
 {% block content %}
         {% if user.is_authenticated %}
-        안녕하세요 {{user.location}} {{user.nickname}}님!
+        안녕하세요 {{user.nickname}}님!
+        <p><em>메뉴를 선택해주세요!</em></p> 
+        {% endif %}
+        {% if not user.is_authenticated %}
+        <p><em>다양한 기능을 사용하시려면 로그인 해주세요!</em></p> 
         {% endif %}
         <a href="?search=true&writer={{user.nickname}}">나의 지도</a>
+        <div id = "buttons">
+        <button id = "menu" onclick = "show()">나만의 지도</button>
+        <button id = "menu">우리의 지도</button>
+        <button id = "menu">그들의 지도</button>
+        </div>
+        <form action="{% url 'myMap' %}" method = "post" id ="form" style = "margin-top: 20px; visibility:hidden">
+            {%csrf_token%}
+            확인하고 싶은 지도를 선택하세요!: <br>
+            <select name="mapList">
+                {% for list in lists %}
+                    {% if list.author == user.username %}
+                    <option value={{list.name}}> {{list.name}}
+                {% endif %}
+                {% endfor %}
+                <option value="add"> 새로운 지도 추가하기
+            </select>
+            <input type="submit" value="전송">
+            <input type="button" value= "취소" onclick = "erase()"/>
+	    </form>
         <h1>MAP</h1>
         <div id="map" style="width:100%;height:350px;"></div>
-<p><em>지도를 클릭해주세요!</em></p> 
+
 <div id="clickLatlng"></div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f10335069a4d9c45d697acbf72f5383f
 "></script>
 <script>
+
+function erase(){
+   document.getElementById('form').style.visibility = "hidden"; 
+}
+
+function show(){
+   document.getElementById('form').style.visibility = "visible"; 
+}
+
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = { 
         center: new kakao.maps.LatLng({{user.lat}}, {{user.lng}}), // 지도의 중심좌표
@@ -73,22 +105,32 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
         </div>
         <div class = "container">
             {% for blog in blogs %}
-           <div> 
-           <script>
-                var tmptitle = '{{blog.title}}';
-                var latlng = new kakao.maps.LatLng('{{blog.lat}}','{{blog.lng}}'));
-                var marker = new kakao.maps.Marker({
-                map: map, // 마커를 표시할 지도
-                position: latlng, // 마커를 표시할 위치
-                title : tmptitle, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다 
-                });
-                marker.setMap(map);
-           </script>
-            <h3>[{{blog.title}}]</h3>
-            작성자 : {{blog.writer}}
-            <br>{{blog.summary}} <button type="button" class="btn btn-secondary" onclick = "location.href = '{%url 'detail' blog.id %}'">원문보기</button>
-            </div>
-        {% endfor %}
+                    <div> 
+                    <script>
+                        var tmptitle = '{{blog.title}}';
+                        var latlng = new kakao.maps.LatLng('{{blog.lat}}','{{blog.lng}}'));
+                        var marker = new kakao.maps.Marker({
+                        map: map, // 마커를 표시할 지도
+                        position: latlng, // 마커를 표시할 위치
+                        title : tmptitle, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다 
+                        });
+                        marker.setMap(map);
+                        
+                        function setMarkers(map) { 
+                            for (var i = 0; i < markers.length; i++) { 
+                                markers[i].setMap(map); 
+                            }             
+                        } 
+                  
+                        function showMarkers() { 
+                            setMarkers(map)     
+                        } 
+                    </script>
+                    <h3>[{{blog.title}}]</h3>
+                    작성자 : {{blog.writer}}
+                    <br>{{blog.summary}} <button type="button" class="btn btn-secondary" onclick = "location.href = '{%url 'detail' blog.id %}'">원문보기</button>
+                    </div>
+            {% endfor %}
         </div>
         <br>
         {% if blogs.has_previous%}
