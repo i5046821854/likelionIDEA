@@ -4,15 +4,15 @@
         {% if user.is_authenticated %}
         안녕하세요 {{user.nickname}}님!
         <p><em>메뉴를 선택해주세요!</em></p> 
-        {% endif %}
-        {% if not user.is_authenticated %}
-        <p><em>다양한 기능을 사용하시려면 로그인 해주세요!</em></p> 
-        {% endif %}
         <div id = "buttons">
         <button id = "menu" onclick = "show()">나만의 지도</button>
         <button id = "menu">우리의 지도</button>
         <button id = "menu">그들의 지도</button>
         </div>
+        {% endif %}
+        {% if not user.is_authenticated %}
+        <p><em>다양한 기능을 사용하시려면 로그인 해주세요!</em></p> 
+        {% endif %}
         <form action="{% url 'newList' %}" method = "get" id ="form" style = "margin-top: 20px; visibility:hidden">
             {%csrf_token%}
             확인하고 싶은 지도를 선택하세요!: <br>
