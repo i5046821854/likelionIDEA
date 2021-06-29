@@ -60,10 +60,10 @@ def test(request):
 
 def edit_profile(request):
     if request.method == "POST":
-        form = editProfileForm(request.POST)
+        form = editProfileForm(request.POST, instance = request.user)
         if form.is_valid():
             form.save()
-            return redirect("home")
+            return redirect("home") 
     else:
         form = editProfileForm(instance = request.user)
         return render(request, 'edit_profile.html', {'form':form})

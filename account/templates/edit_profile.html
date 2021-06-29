@@ -20,8 +20,8 @@
     </div>
     <div class="form-group">
     <label for="form-group"><b>location <b/></label><br>
-        위도 <input type="text" name="lat" id="lat">
-        경도 <input type="text" name="lng" id="lng">
+        위도 <input type="text" name="lat" id="lat" value = {{user.lat}}>
+        경도 <input type="text" name="lng" id="lng" value = {{user.lng}}>
     </div>
     <br>
     <div id="map" style="width:100%;height:350px;"></div>
@@ -30,11 +30,13 @@
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f10335069a4d9c45d697acbf72f5383f"></script>
 <script>
+
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = { 
-        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+        center: new kakao.maps.LatLng({{user.lat}}, {{user.lng}}), // 지도의 중심좌표
         level: 3 // 지도의 확대 레벨
     };
+
 
 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 

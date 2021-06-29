@@ -4,11 +4,13 @@
 <h1>장소 추가하기</h1>
 <form action="{%url 'create' %}" method = "post" enctype="multipart/form-data">
     {%csrf_token%}
-    location:
+    <p>location:
     <input type = "text" name = "lat" value = {{lat}}>
-    <input type = "text" name = "lng" value = {{lng}}>
-    category:
+    <input type = "text" name = "lng" value = {{lng}}> 
+    </p>
+    <p>category:
     <input type = "text" name = "category" value = {{category}}>
+    </p>
     {{form.as_p}} <!--p태그로 감싸기-->
     <button type = "submit">submit</button>
 </form>

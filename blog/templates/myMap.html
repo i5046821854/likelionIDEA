@@ -21,6 +21,7 @@
 
     var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
+    /*
     var mapTypeControl = new kakao.maps.MapTypeControl();
     // 지도에 컨트롤을 추가해야 지도위에 표시됩니다
     // kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
@@ -28,14 +29,14 @@
 
     // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
     var zoomControl = new kakao.maps.ZoomControl();
-    map.addControl(zoomControl, kakao.maps.ControlPosition.TOPLEFT);
+    map.addControl(zoomControl, kakao.maps.ControlPosition.TOPLEFT);*/
 
     var selectedMarker = null;
 
-    // 지도를 클릭한 위치에 표출할 마커입니다
     var centerMarker = new kakao.maps.Marker({ 
         // 지도 중심좌표에 마커를 생성합니다 
-        position: map.getCenter() 
+        position: map.getCenter(),
+
     }); 
 
     centerMarker.setClickable(true)
@@ -65,14 +66,6 @@
         var resultDiv = document.getElementById('clickLatlng'); 
         resultDiv.innerHTML = message;
 
-        var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png'; 
-
-        // 마커 이미지의 이미지 크기 입니다
-        var imageSize = new kakao.maps.Size(24, 35); 
-        
-        // 마커 이미지를 생성합니다    
-        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
-
         var markers = [];
 
     });
@@ -98,47 +91,34 @@
             {% for blog in blogs %} 
                 {% if list.author == user.username and list.name == blog.category %}
                     <script>
-                            var tmptitle = '{{blog.title}}';
-                            var latlng = new kakao.maps.LatLng('{{blog.lat}}','{{blog.lng}}');
-                            
-                          /*  var MARKER_WIDTH = 33, // 기본, 클릭 마커의 너비
-                            MARKER_HEIGHT = 36, // 기본, 클릭 마커의 높이
-                            OFFSET_X = 12, // 기본, 클릭 마커의 기준 X좌표
-                            OFFSET_Y = MARKER_HEIGHT, // 기본, 클릭 마커의 기준 Y좌표
-                            OVER_MARKER_WIDTH = 40, // 오버 마커의 너비
-                            OVER_MARKER_HEIGHT = 42, // 오버 마커의 높이
-                            OVER_OFFSET_X = 13, // 오버 마커의 기준 X좌표
-                            OVER_OFFSET_Y = OVER_MARKER_HEIGHT, // 오버 마커의 기준 Y좌표
-                            SPRITE_MARKER_URL = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markers_sprites2.png', // 스프라이트 마커 이미지 URL
-                            SPRITE_WIDTH = 126, // 스프라이트 이미지 너비
-                            SPRITE_HEIGHT = 146, // 스프라이트 이미지 높이
-                            SPRITE_GAP = 10; // 스프라이트 이미지에서 마커간 간격
-
-                            var markerSize = new kakao.maps.Size(MARKER_WIDTH, MARKER_HEIGHT), // 기본, 클릭 마커의 크기
-                            markerOffset = new kakao.maps.Point(OFFSET_X, OFFSET_Y), // 기본, 클릭 마커의 기준좌표
-                            overMarkerSize = new kakao.maps.Size(OVER_MARKER_WIDTH, OVER_MARKER_HEIGHT), // 오버 마커의 크기
-                            overMarkerOffset = new kakao.maps.Point(OVER_OFFSET_X, OVER_OFFSET_Y), // 오버 마커의 기준 좌표
-                            spriteImageSize = new kakao.maps.Size(SPRITE_WIDTH, SPRITE_HEIGHT); // 스프라이트 이미지의 크기
-
-                            var gapX = (MARKER_WIDTH + SPRITE_GAP), // 스프라이트 이미지에서 마커로 사용할 이미지 X좌표 간격 값
-                            originY = (MARKER_HEIGHT + SPRITE_GAP) * i, // 스프라이트 이미지에서 기본, 클릭 마커로 사용할 Y좌표 값
-                            overOriginY = (OVER_MARKER_HEIGHT + SPRITE_GAP) * i, // 스프라이트 이미지에서 오버 마커로 사용할 Y좌표 값
-                            normalOrigin = new kakao.maps.Point(0, originY), // 스프라이트 이미지에서 기본 마커로 사용할 영역의 좌상단 좌표
-                            clickOrigin = new kakao.maps.Point(gapX, originY), // 스프라이트 이미지에서 마우스오버 마커로 사용할 영역의 좌상단 좌표
-                            overOrigin = new kakao.maps.Point(gapX * 2, overOriginY); // 스프라이트 이미지에서 클릭 마커로 사용할 영역의 좌상단 좌표
-                            
-                            var normalImage = createMarkerImage(markerSize, markerOffset, normalOrigin),
-                            overImage = createMarkerImage(overMarkerSize, overMarkerOffset, overOrigin),
-                            clickImage = createMarkerImage(markerSize, markerOffset, clickOrigin);*/
-
+                    var tmptitle = '{{blog.title}}';
+                    var latlng = new kakao.maps.LatLng('{{blog.lat}}','{{blog.lng}}');
+                    </script>        
+                    {% if list.icon %}
+                    <script>
+                       var imageSrc = '{{list.icon.url}}', // 마커이미지의 주소입니다    
+                                imageSize = new kakao.maps.Size(50, 55), // 마커이미지의 크기입니다
+                                imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                    </script>
+                    {% endif %}
+                    {% if not list.icon %}
+                    <script>
+                        {% load static %}
+                        var imageSrc = '{% static "marker.png" %}', // 마커이미지의 주소입니다    
+                            imageSize = new kakao.maps.Size(48, 52), // 마커이미지의 크기입니다
+                            imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                            // 지도를 클릭한 위치에 표출할 마커입니다   
+                    </script>
+                    {% endif %}
+                    <script>
+                            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
                             var marker = new kakao.maps.Marker({
                             map: map, // 마커를 표시할 지도
                             position: latlng, // 마커를 표시할 위치
                             title : tmptitle, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다 
-                            //image: normalImage
+                            image: markerImage
                             });
                             marker.setMap(map);
-
                             var iwContent = '<div style="padding-left:5px; text-align:center">{{blog.title}}<br><a href = "{%url 'detail' blog.id %}">자세히 보기</a></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
                             iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
                             var infowindow = new kakao.maps.InfoWindow({

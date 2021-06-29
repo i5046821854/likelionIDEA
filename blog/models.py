@@ -8,19 +8,11 @@ class blog(models.Model): #id에 대한 column 안써도됨
     writer = models.CharField(max_length = 100)
     category = models.CharField(max_length = 100, default = "none")
     pub_date = models.DateTimeField()
-    body = models.TextField()
-   # image = models.ImageField(upload_to = "blog/", blank = True, null = True)
+    detail = models.TextField()
     image = models.ImageField(upload_to = "blog/", blank = True, null = True)
     
     def __str__(self):  #객체가 호출될 때 실행됨
         return self.title #제목을 title로 띄우기  
 
     def summary(self): #본문 간단히 나타내기
-        return self.body[:100]
-
-'''class list(models.Model):
-    name = models.CharField(max_length = 200, default="")
-    share = models.BooleanField(default='true')  
-    icon = models.ImageField(upload_to = "blog/", blank = True, null = True)
-    author = models.CharField(max_length = 200, default="")
- '''
+        return self.detail[:100]

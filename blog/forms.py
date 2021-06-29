@@ -5,7 +5,7 @@ from list.models import list
 class BlogForm(forms.ModelForm):
     class Meta:
         model = blog
-        fields = ['title', 'body', 'image']
+        fields = ['title', 'detail', 'image']
 
         
 class listForm(forms.ModelForm):

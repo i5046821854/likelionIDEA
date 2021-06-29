@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>카테고리를 생성하세요!</h1>
-<form action="{% url 'newList' %}" method = "post">
+<form action="{% url 'newList' %}" method = "post" enctype="multipart/form-data">
     {%csrf_token%}
     {{form.as_p}}
     <button type = "submit">submit</button>

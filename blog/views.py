@@ -9,14 +9,6 @@ from django.core.paginator import Paginator
 def home(request):
     blogs = blog.objects.order_by('-pub_date') #최신글 순서
     lists = list.objects.all()
-    search = request.GET.get('search')
-    if search == 'true':
-        author = request.GET.get('writer')
-        blogs = blog.objects.filter(writer = author)
-        return render(request,'home.html', {'blogs': blogs, 'lists':lists} )
-    paginator = Paginator(blogs,3)
-    page = request.GET.get('page')
-    blogs = paginator.get_page(page)
     return render(request, "home.html", {'blogs': blogs, 'lists':lists} )
 
 def detail(request, blog_id):
@@ -36,6 +28,8 @@ def create(request):
         new_blog = form.save(commit=False)
         new_blog.pub_date = timezone.now()
         new_blog.writer = request.user.username
+        print(new_blog.writer)
+        print(request.POST.get('category'))
         new_blog.category = request.POST['category']
         new_blog.lat = request.POST['lat']
         new_blog.lng = request.POST['lng']
@@ -55,37 +49,34 @@ def update(request, id):
     update_blog.writer = request.POST['writer']    
     update_blog.body = request.POST['body']
     update_blog.pub_date = timezone.now()
+    Category = update_blog.category
     update_blog.save()
-    return redirect('detail', update_blog.id)
+    return redirect('myMap', Category)
 
 def delete(request, id):
     delete_blog = blog.objects.get(id = id)
     delete_blog.delete()
-    return redirect('home')
+    Category = delete_blog.category
+    return redirect('myMap', Category)
 
-def myMap(request):
-    if request.method == "POST":
-        Category = request.POST.get('mapList')
-        if(Category == 'add'):
-            return redirect('newList')     
-        blogs = blog.objects.order_by('-pub_date')
-        lists = list.objects.get(name = Category)
+def myMap(request, Category):
+    blogs = blog.objects.order_by('-pub_date')
+    lists = list.objects.get(name = Category)   
     return render(request, 'myMap.html', {'blogs': blogs, 'list':lists})
 
 def newList(request):
+    if request.method == "GET":
+        Category = request.GET.get('mapList')
+        if(Category == 'add'):
+            form = listForm()
+            return render(request, 'newList.html', {'form': form})
+        return redirect('myMap', Category)
     if request.method == "POST":
         tempForm = listForm(request.POST, request.FILES)
         if tempForm.is_valid():
             new_list = tempForm.save(commit=False)
             new_list.author = request.user.username
             new_list.save()
-            blogs = blog.objects.order_by('-pub_date')
-            category = request.POST['name']
-            lists = list.objects.get(name = category)
-            print(request.user.username)
-            print(lists.author)
-            return render(request, 'myMap.html', {'blogs': blogs, 'list': lists})
+            Category = request.POST['name']
+            return redirect('myMap', Category)
         return render(request, 'newList.html', {'form': tempForm})
-    else:     
-        form = listForm()
-        return render(request, 'newList.html', {'form': form})
