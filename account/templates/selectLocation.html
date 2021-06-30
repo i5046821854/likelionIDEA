@@ -142,7 +142,10 @@ function displayPlaces(places) {
         // 해당 장소에 인포윈도우에 장소명을 표시합니다
         // mouseout 했을 때는 인포윈도우를 닫습니다
         (function(marker, title) {
-            kakao.maps.event.addListener(marker, 'click', function(mouseEvent) {    
+            kakao.maps.event.addListener(marker, 'click', function(mouseEvent) {
+                var latlng = marker.getPosition();
+                document.getElementById("lat").value = latlng.getLat();
+                document.getElementById("lng").value = latlng.getLng();     
                 displayInfowindow(marker, title, places[i]);
             });
 
@@ -258,7 +261,7 @@ function displayPagination(pagination) {
 // 인포윈도우에 장소명을 표시합니다
 function displayInfowindow(marker, title, doro) {
     var content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
-    document.getElementById("road_addr").value = title
+    document.getElementById("road_addr").value = title;
     infowindow.setContent(content);
     infowindow.open(map, marker);
 }
